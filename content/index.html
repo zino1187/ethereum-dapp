@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset='UTF-8' />
+        <title>Auto Vehicle Dealer-Buyer Interaction</title>
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
+        <link href="style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id='title'>Auto Vehicle Dealer-Buyer Interaction</div>
+        <br/>
+        <table>
+            <tr>
+                <td id='dealer'>
+                    <div>
+                        <h3>Dealer</h3>
+                        <hr />
+                        <br />
+                        <p>Dealer Balance:</p><label id='dbal' type='text'>0</label>
+                        <br />
+                        <p>Buyer Address:</p><input id='baddr' size=50 type='text' readonly />
+                        <br />
+                        <p>Vehicle Cost:</p><input id='vcost' type='text' readonly />
+                        <br />
+                        <br />
+                        <div class='centeralign' id='one'>
+                            <button id='contract'>Set Contract</button>
+                        </div>
+                    </div>
+                </td>
+                <td id='buyer'>
+                    <div>
+                        <h3>Buyer</h3>
+                        <hr />
+                        <br />
+                        <p>Buyer Balance:</p><label id='bbal' type='text'>0</label>
+                        <br />
+                        <p>Contract Address:</p><input id='caddr' size=50 type='text' readonly />
+                        <br />
+                        <p>Amount:</p><input id='vamt' type='text' readonly />
+                        <br />
+                        <br />
+                        <div class='centeralign' id='two'>
+                            <button id='payment'>Make Payment</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id='events'>
+                        <h3>Event Messages</h3>
+                        <hr />
+                        <br />
+                        <div id='evt_list'></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <script type="text/javascript" src="car.js"></script>
+    </body>
+</html>

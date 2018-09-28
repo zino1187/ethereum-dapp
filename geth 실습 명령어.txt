@@ -1,0 +1,109 @@
+-----------------------------------------------------------------------------
+1.geth 초기화
+-----------------------------------------------------------------------------
+geth --datadir E:\workspace\ether_workspace\test1 init E:\workspace\ether_workspace\test1\genesis.json
+
+(단축 명령어)
+geth --datadir . init genesis.json
+
+-----------------------------------------------------------------------------
+2.geth 시작하기
+-----------------------------------------------------------------------------
+geth --networkid "10" --nodiscover --datadir . --rpc --rpcaddr "172.30.1.4" --rpcport "8545" --rpccorsdomain "*" --rpcapi "eth,net,web3,personal" --targetgaslimit "20000000" console 2>> ./geth_err.log
+
+
+-----------------------------------------------------------------------------
+3.계정
+-----------------------------------------------------------------------------
+	(1) 계정 4개를 만든다
+		personal.newAccount("account1")
+		personal.newAccount("account2")
+		personal.newAccount("account3")
+		personal.newAccount("account4")
+
+	(2) 만들어진 계정을 확인한다 
+		eth.accounts
+
+	(3) index로 특정 계정 확인하기 
+		eth.accounts[index]	
+
+	(4)코인베이스 계정 확인방법	
+		- mining 에  사용할 코인베이스 계정확인 
+		- 기본적으로 index가 0인 계정이 사용된다
+
+	(4)코인베이스 계정 변경하기
+		- miner.setEtherbase(eth.acconts[index])
+		- 실습 후엔 다시 0번째 계정으로 돌려놓자
+
+
+-----------------------------------------------------------------------------
+4.geth 콘솔의 주요 명령어
+-----------------------------------------------------------------------------
+	(1)genesis 블럭 정보 확인
+		- eth.getBlock(블럭높이)  * 블럭높이가 0일 경우 genesis 블럭이다
+
+
+-----------------------------------------------------------------------------
+5.마이닝
+-----------------------------------------------------------------------------
+	(1)마이닝 시작하기
+		miner.start(쓰레드수)  *null , true 가 반환되면 성공이다
+
+	(2)마이닝 상태 확인 
+		eth.mining					* true 가 반환되면 마이닝을 수행중이라는 뜻
+		
+
+-----------------------------------------------------------------------------
+6.코인베이스 잔액확인
+-----------------------------------------------------------------------------
+web3.fromWei(eth.getBalance(eth.accounts[0]), "ehter")
+
+
+-----------------------------------------------------------------------------
+7.송금하기
+-----------------------------------------------------------------------------
+	(1) 송금 및 거래 정보 확인하기
+		- eth.sendTransaction({from:eth.accounts[0] , to: eth.accounts[2],value: web3.toWei(5, "ether")})
+		- 16진수 거래 해시가 출력된다
+		- 거래해시를  getTransaction의 인수로 넣으면 거래 정보가 출력된다 
+		   eth.getTransaction("0x96ac33920423f7b1bec8f985ea245261b30936daedfdd44b49e49ed516ba63b7")
+
+		- eth.getTransactionReceipt("0x96ac33920423f7b1bec8f985ea245261b30936daedfdd44b49e49ed516ba63b7")
+		  * 결과가  null 이 나오면, 거래 정보가 아직 블럭에 저장되지 않았기 때문이므로, 조금 기다려야 한다 ( 이더리움의 마이닝 간격은 약 15초 )
+					
+		- 잔액확인 
+			web3.fromWei( eth.getBalance(eth.accounts[2]) ,"ether")	
+			web3.fromWei( eth.getBalance(eth.accounts[2] , 블럭높이 ) ,"ether")	  * 특정한 시점(블럭높이) 값을 인수로 넣으면 해당 시점의 잔액확인 가능
+
+
+	(2) (1)번 명령어에서 에러가 발생한다 (잠금해제를 하지 않았기 때문)
+		- personal.unlockAccount(eth.accounts[0])
+		- 비밀번호 account1 을 입력한다
+
+	(3) 패스워드 파일로 만들어서 geth  실행하기( 이 실습은 생략해도 좋다 )
+		- exit 명령어로 geth 를 종료한다
+		- password.txt 파일을 프로젝트 폴더에 만든다 
+			account1
+			account2
+			account3
+			account4
+
+		- geth 를 다시 시작하면서 옵션을 부여한다 
+			형식) unlock  잠금해제할 계정 어드레스  --password  "패스워드 파일 경로"	
+			
+			명령어)
+			geth --networkid "10" --nodiscover --datadir "E:\workspace\ether_workspace\test1" --rpc --rpcaddr "localhost" --rpcport "8545" 
+			--rpccorsdomain "*" --rpcapi "eth,net,web3,personal" --targetgaslimit "20000000" \
+			--unlock 0xc722539fb646d4978a2f45b1143216081dc7297d, 0xbac23f6e65178b2f717cd705303abaf1dc91f881, 
+			0x9ae4339913a69049867419fbff982913a7cc7386 , 0x4aead0f3cca1738116d43a2cc0a3831f108030c0 
+			--password "E:\workspace\ether_workspace\test1\password.txt" 
+			console 2>> E:\workspace\ether_workspace\test1\geth_err.log
+
+			비밀번호를 연달아 넣어야 하는데, 잘 모르면 그냥 따로 따로 진행한다
+
+-----------------------------------------------------------------------------
+8.마이닝 종료
+-----------------------------------------------------------------------------
+miner.stop()
+
+
